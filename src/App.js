@@ -1,60 +1,62 @@
 import './App.css';
 import { useState, useEffect } from "react";
-import { searchCity } from "./api/prayerApi";
-import { useCountdown } from './hooks/useCountdown';
-import { fetchGeoData } from './api/reverseGeoApi';
+import { searchTimings } from "./api/prayerApi";
+import { useCountdown, convertTimezone } from './hooks/useCountdown';
 
 const App = () => {
-  const [cityTime, setCityTime] = useState(Object)
   const [address, setAddress] = useState("")
-  const [maghribTime, setMaghribTime] = useState("23:59")
   const [location, setLocation] = useState("")
+  const [cityTimings, setCityTimings] = useState(null)
 
+  const defaultCity = "Gambir, Jakarta Pusat"
+  const currentDate = convertTimezone("Asia/Jakarta")
+
+  console.log(currentDate)
   useEffect(() => {
-    searchCity("Monumen Nasional, Jakarta").then((result) => {
-      setCityTime(result.data)
+    searchTimings(defaultCity, currentDate).then((result) => {
+      setLocation(defaultCity)
+      setCityTimings(result)
     })
   }, [])
 
-  const search = async(q) => {
-    const query = await searchCity(q)
-    setCityTime(query.data)
+  const search = async (q) => {
+    const query = await searchTimings(q)
+
+    setLocation(q)
+    setCityTimings(query)
   }
 
-  const reverseLoc = async(lat, lon) => {
-    const loc = await fetchGeoData(lat, lon)
-    setLocation(loc.features[0].properties)
-  }
+  const [targetTimings, setTargetTimings] = useState()
 
   const GetTiming = () => {
-    const today = new Date().toISOString().split("T")[0]
-    const countdownTimer = useCountdown(`${today}T${maghribTime}`)
-    
     try {
-      const lat = cityTime.meta.latitude
-      const lon = cityTime.meta.longitude
+      let nextCommand
 
-      reverseLoc(lat, lon)
-      console.log(location)
-      setMaghribTime(cityTime.timings.Maghrib)
+      if (new Date().getTime() > new Date(`${currentDate}T${targetTimings}`).getTime()) {
+        setTargetTimings(cityTimings.Imsak)
+        nextCommand = "Next Fasting in"
+      } else {
+        setTargetTimings(cityTimings.Maghrib)
+        nextCommand = "Fasting ends in"
+      }
+
       return (
         <div className="Countdown-wraper">
-          <div className="Countdown-fasting">Next fasting in</div>
-          <div className="Countdown-timer">{ countdownTimer }</div>
-          <div className="Countdown-city">{cityTime.meta.latitude}, {cityTime.meta.longitude}, { location.suburb }</div>
+          <div className="Countdown-fasting">{ nextCommand }</div>
+          <div className="Countdown-timer">{ targetTimings }</div>
+          <div className="Countdown-city">{ location }</div>
         </div>
       )
-    }
-    catch(err) {
-      return (
-        <div className='Countdown-wraper'>
-          <div className="Countdown-loading">
-            Loading...
+    } catch(err) {
+        return (
+          <div className='Countdown-wraper'>
+            <div className="Countdown-loading">
+              Loading...
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
-  }
 
   return (
     <div className="App">

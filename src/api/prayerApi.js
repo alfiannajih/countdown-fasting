@@ -2,9 +2,10 @@ import axios from "axios";
 
 const baseUrl = "http://api.aladhan.com/v1/timingsByAddress"
 
-export const searchCity = async (q) => {
+export const searchTimings = async (q, date) => {
     const search = await axios.get(
         `${baseUrl}?address=${q}`
     )
-    return search.data
+
+    return search.data.data.timings
 }

@@ -6,7 +6,7 @@ const useCountdown = (targetDate) => {
     const [countDown, setCountDown] = useState(
         countDownDate - new Date().getTime()
     );
-
+    
     useEffect(() => {
         const interval = setInterval(() => {
             setCountDown(countDownDate - new Date().getTime());
@@ -15,7 +15,7 @@ const useCountdown = (targetDate) => {
         return () => clearInterval(interval);
     }, [countDownDate]);
 
-    return getReturnValues(countDown);
+    return countDownDate - new Date().getTime();
 }
 
 const getReturnValues = (countDown) => {
@@ -34,4 +34,12 @@ const addZero = (number) => {
     return num;
 }
 
-export { useCountdown }
+const convertTimezone = (timezone) => {
+    const tempDate = new Date().toLocaleString("id-ID", {timeZone: timezone}).split(",")[0]
+    
+    const currentDate = tempDate.split("/")
+
+    return `${currentDate[2]}-${addZero(currentDate[1])}-${addZero(currentDate[0])}`
+} 
+
+export { useCountdown, convertTimezone }
