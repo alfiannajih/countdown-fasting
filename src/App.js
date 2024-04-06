@@ -1,62 +1,46 @@
 import './App.css';
 import { useState, useEffect } from "react";
 import { searchTimings } from "./api/prayerApi";
-import { useCountdown, convertTimezone } from './hooks/useCountdown';
+import { useCountdown } from './hooks/useCountdown';
+import { reverseLoc, getTimeZone } from './api/geoLocApi';
 
 const App = () => {
-  const [address, setAddress] = useState("")
-  const [location, setLocation] = useState("")
-  const [cityTimings, setCityTimings] = useState(null)
+  const [address, setAddress] = useState("Gambir, Jakarta Pusat")
+  const [locTime, setLocTime] = useState("")
+  const [location, setLocation] = useState([null])
+  const [timeZoneOffset, setTimeZoneOffset] = useState("")
 
-  const defaultCity = "Gambir, Jakarta Pusat"
-  const currentDate = convertTimezone("Asia/Jakarta")
-
-  console.log(currentDate)
   useEffect(() => {
-    searchTimings(defaultCity, currentDate).then((result) => {
-      setLocation(defaultCity)
-      setCityTimings(result)
-    })
+    const defaultTime = async () => {
+      const tempTime = await searchTimings(address)
+      setLocTime(tempTime.timings)
+      
+      const tempZone = await getTimeZone(tempTime.meta.timezone)
+      setTimeZoneOffset(tempZone.timezone_offset)
+
+      const tempLoc = await reverseLoc(tempTime.meta.latitude, tempTime.meta.longitude)
+      setLocation(`${tempLoc.display_name} (${tempTime.meta.timezone})`)
+    }
+    defaultTime()
   }, [])
 
-  const search = async (q) => {
-    const query = await searchTimings(q)
-
-    setLocation(q)
-    setCityTimings(query)
+  const setLocalTime = (offset) => {
+    const currentDate = new Date().getTime() + 1000*3600*offset
+    return new Date(currentDate).toLocaleString("id-ID", {timeZone: "UTC"})
   }
 
-  const [targetTimings, setTargetTimings] = useState()
+  const search = async (add) => {
+    const queryAdd = await searchTimings(add)
+    setLocTime(queryAdd.timings)
 
-  const GetTiming = () => {
-    try {
-      let nextCommand
+    const queryTime = await getTimeZone(queryAdd.meta.timezone)
+    setTimeZoneOffset(queryTime.timezone_offset)
 
-      if (new Date().getTime() > new Date(`${currentDate}T${targetTimings}`).getTime()) {
-        setTargetTimings(cityTimings.Imsak)
-        nextCommand = "Next Fasting in"
-      } else {
-        setTargetTimings(cityTimings.Maghrib)
-        nextCommand = "Fasting ends in"
-      }
+    const queryLoc = await reverseLoc(queryAdd.meta.latitude, queryAdd.meta.longitude)
 
-      return (
-        <div className="Countdown-wraper">
-          <div className="Countdown-fasting">{ nextCommand }</div>
-          <div className="Countdown-timer">{ targetTimings }</div>
-          <div className="Countdown-city">{ location }</div>
-        </div>
-      )
-    } catch(err) {
-        return (
-          <div className='Countdown-wraper'>
-            <div className="Countdown-loading">
-              Loading...
-            </div>
-          </div>
-        )
-      }
-    }
+    const locName = queryLoc.display_name.split(",")
+    setLocation(`${locName[0]}, ${locName[1]} (${queryAdd.meta.timezone})`)
+  }
 
   return (
     <div className="App">
@@ -66,14 +50,21 @@ const App = () => {
           <input
             type="Countdown-search"
             placeholder='Enter city name'
-            onChange={({ target}) => setAddress(target.value)}
+            onChange={({ target }) => setAddress(target.value)}
           />
           <input
             type="button"
             value="Search"
             onClick={() => search(address)}
           />
-          <GetTiming />
+          <div className="Countdown-wraper">
+            <div className="Countdown-fasting">Fasting ends in </div>
+            <div className="Countdown-timer">{ useCountdown(`2024-04-07T${locTime.Maghrib}`, timeZoneOffset) }</div>
+            <div className="Additional-Information">
+              <div className="Countdown-location">{ location }</div>
+              <div className="Countdown-timezone">{ setLocalTime(timeZoneOffset) }</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

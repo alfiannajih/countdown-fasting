@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-const useCountdown = (targetDate) => {
-    const countDownDate = new Date(targetDate).getTime();
+const useCountdown = (targetDate, timezone) => {
+    const countDownDate = new Date(targetDate).getTime() - (timezone*60 + new Date().getTimezoneOffset())*60*1000;
 
     const [countDown, setCountDown] = useState(
-        countDownDate - new Date().getTime()
+        countDownDate - (new Date().getTime())
     );
     
     useEffect(() => {
@@ -14,8 +14,8 @@ const useCountdown = (targetDate) => {
 
         return () => clearInterval(interval);
     }, [countDownDate]);
-
-    return countDownDate - new Date().getTime();
+    
+    return getReturnValues(countDown)
 }
 
 const getReturnValues = (countDown) => {
@@ -34,12 +34,4 @@ const addZero = (number) => {
     return num;
 }
 
-const convertTimezone = (timezone) => {
-    const tempDate = new Date().toLocaleString("id-ID", {timeZone: timezone}).split(",")[0]
-    
-    const currentDate = tempDate.split("/")
-
-    return `${currentDate[2]}-${addZero(currentDate[1])}-${addZero(currentDate[0])}`
-} 
-
-export { useCountdown, convertTimezone }
+export { useCountdown }
