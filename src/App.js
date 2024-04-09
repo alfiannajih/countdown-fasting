@@ -1,32 +1,36 @@
 import './App.css';
 import { useState, useEffect } from "react";
 import { searchTimings } from "./api/prayerApi";
-import { useCountdown } from './hooks/useCountdown';
+import { useCountdown, formatDate } from './hooks/useCountdown';
 import { reverseLoc, getTimeZone } from './api/geoLocApi';
 
 const App = () => {
-  const [address, setAddress] = useState("Gambir, Jakarta Pusat")
+  const [address, setAddress] = useState("")
   const [locTime, setLocTime] = useState("")
   const [location, setLocation] = useState([null])
   const [timeZoneOffset, setTimeZoneOffset] = useState("")
 
   useEffect(() => {
     const defaultTime = async () => {
-      const tempTime = await searchTimings(address)
+      const tempTime = await searchTimings("Gambir, Jakarta Pusat")
       setLocTime(tempTime.timings)
       
       const tempZone = await getTimeZone(tempTime.meta.timezone)
       setTimeZoneOffset(tempZone.timezone_offset)
 
       const tempLoc = await reverseLoc(tempTime.meta.latitude, tempTime.meta.longitude)
-      setLocation(`${tempLoc.display_name} (${tempTime.meta.timezone})`)
+
+      const locName = tempLoc.display_name.split(",")
+      setLocation(`${locName[0]}, ${locName[1]} (${tempTime.meta.timezone})`)
     }
     defaultTime()
   }, [])
 
-  const setLocalTime = (offset) => {
+  const searchLocalTime = (offset) => {
     const currentDate = new Date().getTime() + 1000*3600*offset
-    return new Date(currentDate).toLocaleString("id-ID", {timeZone: "UTC"})
+    const formatted = new Date(currentDate).toLocaleString("id-ID", {timeZone: "UTC"})
+
+    return formatted.split(", ")
   }
 
   const search = async (add) => {
@@ -42,13 +46,37 @@ const App = () => {
     setLocation(`${locName[0]}, ${locName[1]} (${queryAdd.meta.timezone})`)
   }
 
+  const Timer = () => {
+    const currentDate = formatDate(searchLocalTime(timeZoneOffset)[0])
+    const currentTime = searchLocalTime(timeZoneOffset)[1].split(".")
+    const currentMaghrib = new Date(`${currentDate}T${locTime.Maghrib}`).getTime()
+    const currentFajr = new Date(`${currentDate}T${locTime.Fajr}`).getTime()
+    
+    const currentTiming = new Date(`${currentDate}T${currentTime[0]}:${currentTime[1]}:${currentTime[2]}`).getTime()
+
+    let targetTime = currentMaghrib
+    let nextCommand = "Fasting end in"
+    if (currentTiming > currentMaghrib || currentTiming < currentFajr) {
+      targetTime = currentFajr + 24*3600*1000
+      nextCommand = "Next fasting in"
+    }
+
+    return (
+      <div>
+        <div className="Countdown-command">{ nextCommand }</div>
+        <div className='Countdown-timer'>
+          { useCountdown(targetTime, timeZoneOffset) }
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="App">
       <div className="Countdown-container">
       <h1>Countdown Ramadhan Fasting</h1>
         <div className="Countdown-search-wrapper">
           <input
-            type="Countdown-search"
             placeholder='Enter city name'
             onChange={({ target }) => setAddress(target.value)}
           />
@@ -57,13 +85,12 @@ const App = () => {
             value="Search"
             onClick={() => search(address)}
           />
-          <div className="Countdown-wraper">
-            <div className="Countdown-fasting">Fasting ends in </div>
-            <div className="Countdown-timer">{ useCountdown(`2024-04-07T${locTime.Maghrib}`, timeZoneOffset) }</div>
-            <div className="Additional-Information">
-              <div className="Countdown-location">{ location }</div>
-              <div className="Countdown-timezone">{ setLocalTime(timeZoneOffset) }</div>
-            </div>
+        </div>
+        <div className="Countdown-wraper">
+          { Timer() }
+          <div className="Additional-Information">
+            <div className="Countdown-location">{ location }</div>
+            <div className="Countdown-timezone">{ searchLocalTime(timeZoneOffset)[0] } ({ searchLocalTime(timeZoneOffset)[1].slice(0, -3) })</div>
           </div>
         </div>
       </div>
