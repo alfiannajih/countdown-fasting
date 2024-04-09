@@ -15,6 +15,9 @@ const useCountdown = (targetDate, timezone) => {
         return () => clearInterval(interval);
     }, [countDownDate]);
     
+    if (isNaN(countDown)) {
+        return "00:00:00"
+    }
     return getReturnValues(countDown)
 }
 
