@@ -2,20 +2,34 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-inline: auto;
 }
 
 .Countdown-wraper {
     margin-top: 24px;
-    width: 50%;
+    width: fit-content;
     margin-inline: auto;
 }
 
 .Countdown-timer {
-    margin-block: 20px;
-    font-size: 4em;
+    margin-block: 10px 20px;
+    font-size: 6em;
+    font-weight: 600;
 }
 
 .Additional-Information {
     text-align: left;
+    font-size: 1em;
+}
+
+.Countdown-search-wrapper input {
+    font-size: 1em;
+    margin-inline: 5px;
+}
+
+.Countdown-command {
+    font-size: 1.5em;
+}
+
+h1 {
+    font-size: 3em;
 }
