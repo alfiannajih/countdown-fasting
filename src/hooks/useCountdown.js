@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const useCountdown = (targetDate, timezone) => {
-    const countDownDate = new Date(targetDate).getTime() - (timezone*60 + new Date().getTimezoneOffset())*60*1000;
+    const countDownDate = targetDate - (timezone*60 + new Date().getTimezoneOffset())*60*1000;
 
     const [countDown, setCountDown] = useState(
         countDownDate - (new Date().getTime())
@@ -34,4 +34,13 @@ const addZero = (number) => {
     return num;
 }
 
-export { useCountdown }
+const formatDate = (oldDate) => {
+    const splitDate = oldDate.split("/")
+    const day = splitDate[0]
+    const month = splitDate[1]
+    const year = splitDate[2]
+
+    return `${year}-${addZero(month)}-${addZero(day)}`
+  }
+
+export { useCountdown, formatDate }
