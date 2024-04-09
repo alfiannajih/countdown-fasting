@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { searchTimings } from "./api/prayerApi";
 import { useCountdown, formatDate } from './hooks/useCountdown';
 import { reverseLoc, getTimeZone } from './api/geoLocApi';
+import { locationIcon, timeIcon } from './Icon';
 
 const App = () => {
   const [address, setAddress] = useState("")
@@ -77,10 +78,12 @@ const App = () => {
       <h1>Countdown Ramadhan Fasting</h1>
         <div className="Countdown-search-wrapper">
           <input
+            className='Search-input'
             placeholder='Enter city name'
             onChange={({ target }) => setAddress(target.value)}
           />
           <input
+            className='Search-button'
             type="button"
             value="Search"
             onClick={() => search(address)}
@@ -89,8 +92,8 @@ const App = () => {
         <div className="Countdown-wraper">
           { Timer() }
           <div className="Additional-Information">
-            <div className="Countdown-location">{ location }</div>
-            <div className="Countdown-timezone">{ searchLocalTime(timeZoneOffset)[0] } ({ searchLocalTime(timeZoneOffset)[1].slice(0, -3) })</div>
+            <div className="Countdown-location">{ locationIcon(25) }{ location }</div>
+            <div className="Countdown-timezone">{ timeIcon(25) }{ searchLocalTime(timeZoneOffset)[0] } ({ searchLocalTime(timeZoneOffset)[1].slice(0, -3) })</div>
           </div>
         </div>
       </div>
