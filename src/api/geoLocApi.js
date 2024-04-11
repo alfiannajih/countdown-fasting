@@ -10,7 +10,7 @@ const reverseLoc = async (lat, lon) => {
 }
 
 const timeZoneUrl = "https://api.ipgeolocation.io/timezone"
-const apiKey = "8cdcd965323747268f661a3b4eb7d1a4"
+const apiKey = process.env.REACT_APP_GEOAPIFY_API_KEY
 const getTimeZone = async (timezone) => {
     const search = await axios.get(
         `${timeZoneUrl}?apiKey=${apiKey}&tz=${timezone}`
