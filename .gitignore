@@ -25,3 +25,5 @@ yarn-error.log*
 images/
 # Local Netlify folder
 .netlify
+
+.env
