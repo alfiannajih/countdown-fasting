@@ -1,19 +1,18 @@
 import axios from "axios";
 
-const baseUrl = "https://nominatim.openstreetmap.org/reverse"
+const baseUrl = "https://countdown-fasting-production.up.railway.app/api/reverse_location"
 const reverseLoc = async (lat, lon) => {
     const search = await axios.get(
-        `${baseUrl}?format=json&zoom=8&lat=${lat}&lon=${lon}`
+        `${baseUrl}?lat=${lat}&lon=${lon}`
     )
 
     return search.data
 }
 
-const timeZoneUrl = "https://api.ipgeolocation.io/timezone"
-const apiKey = process.env.REACT_APP_IPGEOLOCATION_API_KEY
+const timeZoneUrl = "https://countdown-fasting-production.up.railway.app/api/time_zone"
 const getTimeZone = async (timezone) => {
     const search = await axios.get(
-        `${timeZoneUrl}?apiKey=${apiKey}&tz=${timezone}`
+        `${timeZoneUrl}?timezone=${timezone}`
     )
 
     return search.data

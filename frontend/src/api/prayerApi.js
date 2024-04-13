@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const baseUrl = "http://api.aladhan.com/v1/timingsByAddress"
+const baseUrl = "https://countdown-fasting-production.up.railway.app/api/timings"
 
-const searchTimings = async (q, date) => {
+const searchTimings = async (q) => {
     const search = await axios.get(
-        `${baseUrl}/${date}?address=${q}`
+        `${baseUrl}?query=${q}`
     )
 
-    return search.data.data
+    return search.data
 }
 
 export { searchTimings }
