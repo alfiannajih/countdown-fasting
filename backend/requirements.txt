@@ -1,4 +1,4 @@
-uvicorn
+hypercorn
 requests
 fastapi
 python-dotenv
