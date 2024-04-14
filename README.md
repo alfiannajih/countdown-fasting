@@ -7,7 +7,7 @@
 <div align="center">
 <h3 align="center">Countdown Ramadhan Fasting</h3>
   <p align="center">
-    Developing a website that can help users know the start and end times of their Ramadan fasting periods based on their city.
+    Developing full stack app that can help users know the start and end times of their Ramadan fasting periods based on their city.
     <br />
     <br />
     <a href="https://countdown-ramadhan-fasting.netlify.app/">View Demo</a>
@@ -61,26 +61,6 @@ Before doing the installation, make sure you have Node.js and npm installed on y
 
 ### Installation
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/alfiannajih/weather-data-pipeline.git
-   ```
-2. Install node module inside the project folder
-   ```sh
-   npm install
-   ```
-3. Add your Geoapify API Key to your environment variable (`.env`)
-   ```
-   REACT_APP_GEOAPIFY_API_KEY=<YOUR-API-KEY>
-   ```
-4. Start the react project
-   ```sh
-   npm run start
-   ```
-5. Open your web browser by entering the URL below
-   ```
-   localhost:3000
-   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -94,7 +74,7 @@ Before doing the installation, make sure you have Node.js and npm installed on y
 
 
 <!-- ROADMAP -->
-## Roadmap
+## To Do
 
 - [x] Add function to call geo location API
 - [x] Add function to call fasting periods API
