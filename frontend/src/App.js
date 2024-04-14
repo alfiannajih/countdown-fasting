@@ -2,7 +2,6 @@ import './App.css';
 import { useState, useEffect } from "react";
 import { searchTimings } from "./api/prayerApi";
 import { useCountdown, formatDate } from './hooks/useCountdown';
-import { reverseLoc, getTimeZone } from './api/geoLocApi';
 import { locationIcon, timeIcon } from './Icon';
 
 const App = () => {
@@ -16,13 +15,9 @@ const App = () => {
       const tempTime = await searchTimings("Gambir, Jakarta Pusat")
       setLocTime(tempTime.timings)
       
-      const tempZone = await getTimeZone(tempTime.meta.timezone)
-      setTimeZoneOffset(tempZone.timezone_offset)
+      setTimeZoneOffset(tempTime.timezone_offset)
 
-      const tempLoc = await reverseLoc(tempTime.meta.latitude, tempTime.meta.longitude)
-
-      const locName = tempLoc.display_name.split(",")
-      setLocation(`${locName[0]}, ${locName[1]} (${tempTime.meta.timezone})`)
+      setLocation(tempTime.display_location)
     }
     defaultTime()
   }, [])
@@ -38,13 +33,9 @@ const App = () => {
     const queryAdd = await searchTimings(add)
     setLocTime(queryAdd.timings)
 
-    const queryTime = await getTimeZone(queryAdd.meta.timezone)
-    setTimeZoneOffset(queryTime.timezone_offset)
+    setTimeZoneOffset(queryAdd.timezone_offset)
 
-    const queryLoc = await reverseLoc(queryAdd.meta.latitude, queryAdd.meta.longitude)
-
-    const locName = queryLoc.display_name.split(",")
-    setLocation(`${locName[0]}, ${locName[1]} (${queryAdd.meta.timezone})`)
+    setLocation(queryAdd.display_location)
   }
 
   const Timer = () => {
