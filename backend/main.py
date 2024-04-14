@@ -13,8 +13,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "localhost:3000",
-    "https://countdown-ramadhan-fasting.netlify.app/",
-    "https://countdown-ramadhan-fasting.netlify.app"
+    os.getenv("FRONTEND_URL")
 ]
 
 app.add_middleware(
