@@ -52,6 +52,11 @@
     padding-inline: 30px;
 }
 
+.Search-button:hover {
+    background-color: #5a6356;
+    color: #d3d8d0;
+}
+
 .Countdown-command {
     font-size: 2em;
     font-weight: bold;
@@ -61,6 +66,7 @@ h1 {
     font-size: 3em;
     font-weight: bold;
     margin-bottom: 1em;
+    margin-top: 25px;
 }
 
 svg {
