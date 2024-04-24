@@ -10,19 +10,54 @@
     text-align: center;
 }
 
-.Countdown-wraper {
-    margin-top: 15px;
-    width: 30em;
-    margin-inline: auto;
-    background-color: #819c72;
-    padding: 20px;
-    border-radius: 10px;
+@media screen and (min-width: 1200px) {
+    h1 {
+        font-size: 3em;
+        font-weight: bold;
+        margin-bottom: 1em;
+        margin-top: 25px;
+    }
+
+    .Countdown-wraper {
+        margin-top: 15px;
+        width: 50vmax;
+        max-width: 30em;
+        margin-inline: auto;
+        background-color: #819c72;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .Countdown-timer {
+        margin-block: 10px 20px;
+        font-size: 7em;
+        font-weight: 600;
+    }   
 }
 
-.Countdown-timer {
-    margin-block: 10px 20px;
-    font-size: 7em;
-    font-weight: 600;
+@media screen and (max-width: 1200px) {
+    h1 {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 1em;
+        margin-top: 25px;
+    }
+    
+    .Countdown-wraper {
+        margin-top: 15px;
+        width: 18em;
+        max-width: 30em;
+        margin-inline: auto;
+        background-color: #819c72;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .Countdown-timer {
+        margin-block: 10px 20px;
+        font-size: 5em;
+        font-weight: 600;
+    }   
 }
 
 .Additional-Information {
@@ -36,7 +71,7 @@
 }
 
 .Countdown-search-wrapper input {
-    font-size: 1.3em;
+    font-size: min(1.3em, 5vw);
     margin-bottom: 5px;
     border: none;
     padding-block: 10px;
@@ -47,7 +82,7 @@
     color: #63755a;
     border-radius: 20px 0 0 20px;
     padding-inline: 15px;
-    width: 15em;
+    width: 25vmin;
 }
 
 .Search-button {
@@ -66,13 +101,6 @@
 .Countdown-command {
     font-size: 2em;
     font-weight: bold;
-}
-
-h1 {
-    font-size: 3em;
-    font-weight: bold;
-    margin-bottom: 1em;
-    margin-top: 25px;
 }
 
 svg {
