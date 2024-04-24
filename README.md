@@ -53,14 +53,59 @@ The objective of this project is to create a website that performs a countdown t
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Here are a few steps to follow in order to run the project locally on your computer.
+Here are a few steps to follow in order to run the project locally on your computer and doing some experiments with it.
 
 ### Prerequisites
 
-Before doing the installation, make sure you have Node.js and npm installed on your computer. For the installation guide, you can refer to the  official documentation.
+Before doing the installation
+make sure you have Python, Node.js and npm installed on your computer. For the installation guide, you can refer to the  official documentation.
 
 ### Installation
+1. Clone this repository
+   ```sh
+   git clone https://github.com/alfiannajih/countdown-fasting .
+   ```
+2. For the backend app, follow the installation below:
+   - Change directory to the backend
+     ```sh
+     cd backend
+     ```
+   - Create virtual environment
+     ```sh
+     python -m venv venv
+     ```
+   - Install required packages
+     ```sh
+     pip install -r requirements.txt
+     ```
+   - Create new file `.env` and insert your IP Geolocation API key
+     ```sh
+     IPGEOLOCATION_API_KEY=<API-KEY>
+     ```
+   - Run the app
+     ```sh
+     hypercorn main:app --bind 0.0.0.0:80
+     ```
 
+3. For the frontend app, follow the installation below:
+   - Change directory to the backend
+     ```sh
+     cd frontend
+     ```
+   - Install the react app
+     ```sh
+     npm install
+     ```
+   - Start the react app
+     ```sh
+     npm run start
+     ```
+   - Open your web browser by entering the URL below
+     ```sh
+     localhost:3000
+     ```
+
+Happy Coding!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,7 +134,7 @@ Before doing the installation, make sure you have Node.js and npm installed on y
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [Linkedin](https://www.linkedin.com/in/bahrul-alfian-najih/) - alfiannajih@gmail.com
+Bahrul Alfian Najih- [Linkedin](https://www.linkedin.com/in/bahrul-alfian-najih/) - alfiannajih@gmail.com
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
